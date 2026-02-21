@@ -1055,6 +1055,8 @@
         let selectedDeleteMsg = null;
         let muteCheckInterval = null;
         let statsInterval = null;
+        let heartbeatInterval = null;
+        let presenceRef = null;
         
         // Auth
         function switchTab(tab) {
@@ -1096,7 +1098,7 @@
                         password: password,
                         avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random&color=fff`,
                         createdAt: firebase.database.ServerValue.TIMESTAMP,
-                        isOnline: true,
+                        isOnline: false,
                         lastSeen: firebase.database.ServerValue.TIMESTAMP,
                         isAdmin: isUserAdmin
                     };
@@ -1130,11 +1132,6 @@
                     });
                     
                     if (!user) return showError('login-error', 'Email ou senha incorretos');
-                    
-                    db.ref('users/' + user.id).update({
-                        isOnline: true,
-                        lastSeen: firebase.database.ServerValue.TIMESTAMP
-                    });
                     
                     loginUser(user);
                 });
@@ -1183,11 +1180,6 @@
                         showBanScreen();
                         return;
                     }
-                    
-                    db.ref('users/' + user.id).update({
-                        isOnline: true,
-                        lastSeen: firebase.database.ServerValue.TIMESTAMP
-                    });
                     
                     checkPunishments();
                 });
@@ -1250,8 +1242,69 @@
             
             if (isAdmin) document.getElementById('admin-btn').style.display = 'flex';
             
+            setupPresence();
             setupMuteListener();
             setupChat();
+        }
+        
+        // NOVO: Sistema de presença real (apenas online quando está no site)
+        function setupPresence() {
+            if (!currentUser) return;
+            
+            const userId = currentUser.id;
+            const userStatusRef = db.ref('users/' + userId);
+            
+            // Referência para o servidor de timestamp
+            const connectedRef = db.ref('.info/connected');
+            
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    // Quando conecta, marca como online
+                    userStatusRef.update({
+                        isOnline: true,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    
+                    // Quando desconectar (fechar aba, internet cair, etc), marca como offline
+                    userStatusRef.onDisconnect().update({
+                        isOnline: false,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+            
+            // Heartbeat a cada 30 segundos para manter online
+            heartbeatInterval = setInterval(() => {
+                if (currentUser) {
+                    userStatusRef.update({
+                        isOnline: true,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            }, 30000);
+            
+            // Limpar quando mudar de página
+            window.addEventListener('beforeunload', () => {
+                if (currentUser) {
+                    userStatusRef.update({
+                        isOnline: false,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+            
+            // Detectar quando a aba fica inativa/ativa
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // Aba minimizada ou trocada - mantém online por enquanto
+                } else {
+                    // Voltou para a aba - atualiza timestamp
+                    userStatusRef.update({
+                        isOnline: true,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
         }
         
         function setupMuteListener() {
@@ -1292,35 +1345,61 @@
         }
         
         function setupChat() {
+            // Limpa mensagens deletadas antigas (mais de 1 hora)
+            const oneHourAgo = Date.now() - (60 * 60 * 1000);
+            db.ref('messages').orderByChild('timestamp').endAt(oneHourAgo).once('value', snap => {
+                snap.forEach(child => {
+                    const msg = child.val();
+                    if (msg.deleted) {
+                        child.ref.remove();
+                    }
+                });
+            });
+
+            // Listen novas mensagens - NÃO mostra mensagens deletadas
             db.ref('messages').limitToLast(50).on('child_added', snap => {
                 const msg = snap.val();
+                
+                // Não mostra mensagens deletadas
+                if (msg.deleted) return;
+                
                 const isOwn = msg.userId === currentUser?.id;
                 renderMessage(snap.key, msg, isOwn, msg.isAdmin || false);
             });
             
+            // Quando uma mensagem é marcada como deletada, remove ela da tela
+            db.ref('messages').on('child_changed', snap => {
+                const msg = snap.val();
+                const el = document.getElementById('msg-' + snap.key);
+                
+                if (msg.deleted && el) {
+                    // Remove o elemento completamente em vez de mostrar "deletada"
+                    el.remove();
+                }
+            });
+            
+            // Quando admin remove completamente
             db.ref('messages').on('child_removed', snap => {
                 const el = document.getElementById('msg-' + snap.key);
                 if (el) el.remove();
             });
             
-            db.ref('messages').on('child_changed', snap => {
-                const msg = snap.val();
-                if (msg.deleted) {
-                    const el = document.getElementById('msg-' + snap.key);
-                    if (el) {
-                        el.querySelector('.message-content').innerHTML = 
-                            '<span style="opacity:0.5;font-style:italic;">🗑️ Mensagem deletada</span>';
-                        el.querySelector('.message-content').classList.add('deleted-message');
-                    }
-                }
-            });
-            
+            // Online count - agora verifica lastSeen também (online nos últimos 2 minutos)
             db.ref('users').on('value', snap => {
                 let online = 0;
-                snap.forEach(child => { if (child.val().isOnline) online++; });
+                const twoMinutesAgo = Date.now() - (2 * 60 * 1000);
+                
+                snap.forEach(child => {
+                    const user = child.val();
+                    // Considera online se isOnline=true E lastSeen nos últimos 2 minutos
+                    if (user.isOnline && user.lastSeen > twoMinutesAgo) {
+                        online++;
+                    }
+                });
                 document.getElementById('online-count').textContent = `● ${online}`;
             });
             
+            // Ban check
             if (currentUser) {
                 db.ref('banned/' + currentUser.email.replace(/\./g, '_')).on('value', snap => {
                     if (snap.exists()) showBanScreen();
@@ -1331,6 +1410,9 @@
         }
         
         function renderMessage(msgId, msg, isOwn, showAdminTag) {
+            // Não renderiza se estiver deletada
+            if (msg.deleted) return;
+            
             const container = document.getElementById('chat-messages');
             const div = document.createElement('div');
             div.id = 'msg-' + msgId;
@@ -1421,11 +1503,13 @@
             ]).then(([usersSnap, bannedSnap, mutedSnap]) => {
                 const users = [];
                 let onlineCount = 0;
+                const twoMinutesAgo = Date.now() - (2 * 60 * 1000);
                 
                 usersSnap.forEach(child => {
                     const u = child.val();
                     u.id = child.key;
-                    if (u.isOnline) onlineCount++;
+                    // Só conta como online se lastSeen recente
+                    if (u.isOnline && u.lastSeen > twoMinutesAgo) onlineCount++;
                     users.push(u);
                 });
                 
@@ -1451,6 +1535,7 @@
         function renderAdminUserList(users, banned, muted) {
             const list = document.getElementById('user-list');
             const filter = document.getElementById('user-search').value.toLowerCase();
+            const twoMinutesAgo = Date.now() - (2 * 60 * 1000);
             
             list.innerHTML = '';
             
@@ -1465,13 +1550,17 @@
             filtered.sort((a, b) => {
                 if (a.isAdmin && !b.isAdmin) return -1;
                 if (!a.isAdmin && b.isAdmin) return 1;
-                return (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0);
+                // Ordena por online primeiro
+                const aOnline = a.isOnline && a.lastSeen > twoMinutesAgo;
+                const bOnline = b.isOnline && b.lastSeen > twoMinutesAgo;
+                return (bOnline ? 1 : 0) - (aOnline ? 1 : 0);
             });
             
             filtered.forEach(u => {
                 const isBanned = !!banned[u.email];
                 const isMuted = !!muted[u.email];
                 const isSelf = u.email === currentUser.email;
+                const isReallyOnline = u.isOnline && u.lastSeen > twoMinutesAgo;
                 
                 const div = document.createElement('div');
                 div.className = `user-item ${isBanned ? 'banned' : ''} ${isMuted ? 'muted' : ''}`;
@@ -1480,7 +1569,7 @@
                 let statusClass = 'status-offline';
                 if (isBanned) { status = 'BANIDO'; statusClass = 'status-banned'; }
                 else if (isMuted) { status = 'SILENCIADO'; statusClass = 'status-muted'; }
-                else if (u.isOnline) { status = 'ONLINE'; statusClass = 'status-online'; }
+                else if (isReallyOnline) { status = 'ONLINE'; statusClass = 'status-online'; }
                 
                 const adminBadge = u.isAdmin ? '<span class="admin-tag">[ADMIN]</span>' : '';
                 
@@ -1629,17 +1718,8 @@
         }
         
         function confirmDelete() {
-            if (selectedDeleteMsg.isOwn) {
-                // Própria mensagem - marca como deletada
-                db.ref('messages/' + selectedDeleteMsg.id).update({
-                    deleted: true,
-                    deletedBy: currentUser.email,
-                    deletedAt: firebase.database.ServerValue.TIMESTAMP
-                });
-            } else {
-                // Admin deletando outro - remove completamente
-                db.ref('messages/' + selectedDeleteMsg.id).remove();
-            }
+            // Agora remove completamente sempre, não marca como deletada
+            db.ref('messages/' + selectedDeleteMsg.id).remove();
             closeModal('delete-modal');
         }
         
@@ -1647,16 +1727,29 @@
         
         function logout() {
             if (currentUser) {
+                // Marca como offline imediatamente
                 db.ref('users/' + currentUser.id).update({
                     isOnline: false,
                     lastSeen: firebase.database.ServerValue.TIMESTAMP
                 });
+                
+                // Remove o onDisconnect para não sobrescrever
+                db.ref('users/' + currentUser.id).onDisconnect().cancel();
             }
+            
+            clearInterval(heartbeatInterval);
             localStorage.removeItem('chatpost_session');
             location.reload();
         }
         
         function forceLogout() {
+            if (currentUser) {
+                db.ref('users/' + currentUser.id).update({
+                    isOnline: false,
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+            clearInterval(heartbeatInterval);
             localStorage.removeItem('chatpost_session');
             location.reload();
         }
@@ -1673,7 +1766,19 @@
         
         window.onload = checkSession;
         
+        // Cleanup quando fechar a página
         window.onbeforeunload = () => {
+            if (currentUser) {
+                db.ref('users/' + currentUser.id).update({
+                    isOnline: false,
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+            clearInterval(heartbeatInterval);
+        };
+        
+        // Também trata quando o navegador crasha ou fecha abruptamente
+        window.onpagehide = () => {
             if (currentUser) {
                 db.ref('users/' + currentUser.id).update({
                     isOnline: false,
