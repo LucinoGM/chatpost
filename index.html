@@ -21,6 +21,8 @@
             --neon-red: #ff073a;
             --neon-blue: #00f3ff;
             --neon-purple: #bf00ff;
+            --neon-yellow: #ffff00;
+            --neon-orange: #ff6600;
             --dark-bg: #0a0a0a;
             --darker-bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
@@ -32,6 +34,70 @@
             color: #fff;
             overflow-x: hidden;
             min-height: 100vh;
+        }
+        
+        /* Tela de Silenciamento */
+        #mute-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0a00 0%, #000 100%);
+            z-index: 10000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .mute-icon {
+            font-size: 8rem;
+            animation: pulse-mute 2s infinite;
+            filter: drop-shadow(0 0 30px var(--neon-orange));
+        }
+        
+        @keyframes pulse-mute {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .mute-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            background: linear-gradient(45deg, var(--neon-orange), var(--neon-red), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: rgb-shift 3s infinite;
+        }
+        
+        @keyframes rgb-shift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        .mute-reason {
+            color: #aaa;
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid var(--neon-orange);
+            border-radius: 15px;
+            background: rgba(255, 102, 0, 0.1);
+        }
+        
+        .mute-timer {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            color: var(--neon-yellow);
+            margin: 20px 0;
+            text-shadow: 0 0 20px var(--neon-yellow);
         }
         
         /* Tela de Banimento */
@@ -205,17 +271,6 @@
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
         }
         
-        .input-group input.error {
-            border-color: var(--neon-red);
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-        
         .auth-btn {
             width: 100%;
             padding: 15px;
@@ -308,6 +363,25 @@
             transform: scale(1.05);
         }
         
+        /* Tag ADMIN RGB */
+        .admin-tag {
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            font-size: 0.7rem;
+            margin-left: 5px;
+            animation: rainbow 2s ease infinite;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
         .logout-btn {
             background: transparent;
             border: 2px solid var(--neon-red);
@@ -361,9 +435,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 900px;
-            height: 85vh;
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
             background: rgba(10, 10, 10, 0.98);
             border: 2px solid var(--neon-purple);
             border-radius: 20px;
@@ -427,10 +501,6 @@
             outline: none;
         }
         
-        #user-search:focus {
-            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
-        }
-        
         .admin-stats {
             display: flex;
             gap: 20px;
@@ -448,6 +518,10 @@
             border-left-color: var(--neon-red);
         }
         
+        .stat-box.muted {
+            border-left-color: var(--neon-orange);
+        }
+        
         .stat-label {
             font-size: 0.8rem;
             color: #888;
@@ -457,10 +531,6 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--neon-green);
-        }
-        
-        .stat-box.banned .stat-value {
-            color: var(--neon-red);
         }
         
         .user-list {
@@ -475,20 +545,28 @@
             border-radius: 15px;
             padding: 15px;
             margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             transition: all 0.3s;
         }
         
         .user-item:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
         }
         
         .user-item.banned {
             border-color: var(--neon-red);
             background: rgba(255, 7, 58, 0.1);
+        }
+        
+        .user-item.muted {
+            border-color: var(--neon-orange);
+            background: rgba(255, 102, 0, 0.1);
+        }
+        
+        .user-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
         
         .user-item-info {
@@ -508,6 +586,8 @@
             margin: 0;
             color: var(--neon-blue);
             font-size: 1.1rem;
+            display: flex;
+            align-items: center;
         }
         
         .user-item-details p {
@@ -516,10 +596,47 @@
             color: #888;
         }
         
-        .user-item-status {
+        .user-actions {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-mute {
+            background: var(--neon-orange);
+            color: #000;
+        }
+        
+        .btn-unmute {
+            background: var(--neon-yellow);
+            color: #000;
+        }
+        
+        .btn-ban {
+            background: var(--neon-red);
+            color: #fff;
+        }
+        
+        .btn-unban {
+            background: var(--neon-green);
+            color: #000;
+        }
+        
+        .btn-rename {
+            background: var(--neon-blue);
+            color: #000;
         }
         
         .status-badge {
@@ -547,42 +664,10 @@
             border: 1px solid var(--neon-red);
         }
         
-        .ban-btn, .unban-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        
-        .ban-btn {
-            background: var(--neon-red);
-            color: #fff;
-        }
-        
-        .ban-btn:hover {
-            box-shadow: 0 0 20px rgba(255, 7, 58, 0.6);
-            transform: scale(1.05);
-        }
-        
-        .unban-btn {
-            background: var(--neon-green);
-            color: #000;
-        }
-        
-        .unban-btn:hover {
-            box-shadow: 0 0 20px rgba(57, 255, 20, 0.6);
-            transform: scale(1.05);
-        }
-        
-        .no-results {
-            text-align: center;
-            color: #666;
-            padding: 40px;
-            font-size: 1.1rem;
+        .status-muted {
+            background: rgba(255, 102, 0, 0.2);
+            color: var(--neon-orange);
+            border: 1px solid var(--neon-orange);
         }
         
         .overlay {
@@ -597,20 +682,106 @@
             backdrop-filter: blur(5px);
         }
         
+        /* Modal de Ações */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 20, 0.98);
+            border: 2px solid var(--neon-purple);
+            border-radius: 20px;
+            padding: 30px;
+            z-index: 3000;
+            min-width: 300px;
+            max-width: 90%;
+        }
+        
+        .modal h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-purple);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal input, .modal select, .modal textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-blue);
+            border-radius: 10px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+        }
+        
+        .modal textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .modal-confirm {
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+            color: #000;
+        }
+        
+        .modal-cancel {
+            background: transparent;
+            border: 2px solid var(--neon-red);
+            color: var(--neon-red);
+        }
+        
+        .mute-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .mute-option {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .mute-option:hover, .mute-option.selected {
+            border-color: var(--neon-orange);
+            background: rgba(255, 102, 0, 0.2);
+        }
+        
         .chat-container {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
             background: var(--darker-bg);
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(57, 255, 20, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.03) 0%, transparent 50%);
         }
         
         .message {
             margin-bottom: 20px;
             animation: messageSlide 0.3s ease;
             max-width: 80%;
+            position: relative;
         }
         
         @keyframes messageSlide {
@@ -636,6 +807,8 @@
             color: var(--neon-blue);
             font-weight: 700;
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
         }
         
         .message-time {
@@ -651,6 +824,7 @@
             margin-left: 45px;
             backdrop-filter: blur(5px);
             word-wrap: break-word;
+            position: relative;
         }
         
         .own-message .message-content {
@@ -665,6 +839,34 @@
         
         .own-message .message-header {
             justify-content: flex-end;
+        }
+        
+        /* Menu de 3 pontinhos */
+        .message-menu {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: none;
+        }
+        
+        .message:hover .message-menu {
+            display: block;
+        }
+        
+        .menu-btn {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .menu-btn:hover {
+            background: var(--neon-red);
         }
         
         .chat-input-container {
@@ -686,12 +888,16 @@
             font-size: 1rem;
             font-family: 'Rajdhani', sans-serif;
             outline: none;
-            transition: all 0.3s;
         }
         
         #message-input:focus {
             border-color: var(--neon-green);
             box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+        }
+        
+        #message-input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .btn-send {
@@ -714,6 +920,11 @@
             box-shadow: 0 0 25px rgba(57, 255, 20, 0.6);
         }
         
+        .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
         .system-message {
             text-align: center;
             color: #666;
@@ -722,11 +933,15 @@
             font-size: 0.9rem;
         }
         
-        .typing-indicator {
-            color: var(--neon-blue);
-            font-style: italic;
-            padding: 5px 20px;
-            font-size: 0.9rem;
+        .muted-warning {
+            background: rgba(255, 102, 0, 0.2);
+            border: 1px solid var(--neon-orange);
+            color: var(--neon-orange);
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
         
         ::-webkit-scrollbar {
@@ -742,23 +957,30 @@
             border-radius: 4px;
         }
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--neon-blue);
-        }
-        
         @media (max-width: 768px) {
             .logo { font-size: 2.5rem; }
-            .skull { font-size: 3rem; }
-            .auth-box { padding: 30px 20px; }
-            .chat-header { flex-direction: column; gap: 10px; }
-            .header-left { flex-direction: column; }
+            .chat-header { flex-direction: column; }
             .message { max-width: 95%; }
-            .admin-btn { font-size: 0.8rem; padding: 6px 15px; }
-            #admin-panel { width: 95%; height: 90vh; }
+            .mute-options { grid-template-columns: repeat(2, 1fr); }
+            #admin-panel { width: 98%; height: 95vh; }
         }
     </style>
 </head>
 <body>
+    <!-- Tela de Silenciamento -->
+    <div id="mute-screen">
+        <div class="mute-icon">🔇</div>
+        <h1 class="mute-text">SILENCIADO</h1>
+        <div class="mute-reason">
+            <strong>Motivo:</strong> <span id="mute-reason-text">-</span>
+        </div>
+        <div class="mute-timer" id="mute-timer">00:00:00</div>
+        <p style="color: #888; margin-top: 20px;">Aguarde o tempo acabar para voltar ao chat</p>
+        <button class="logout-btn" onclick="forceLogout()" style="margin-top: 30px;">
+            Sair da Conta
+        </button>
+    </div>
+
     <!-- Tela de Banimento -->
     <div id="ban-screen">
         <div class="ban-skull">☠️</div>
@@ -786,7 +1008,6 @@
                 <button class="auth-tab" onclick="switchTab('register')">CRIAR CONTA</button>
             </div>
             
-            <!-- Form Login -->
             <form class="auth-form active" id="login-form" onsubmit="handleLogin(event)">
                 <div class="input-group">
                     <label>📧 E-mail</label>
@@ -800,7 +1021,6 @@
                 <div class="error-msg" id="login-error"></div>
             </form>
             
-            <!-- Form Cadastro -->
             <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
                 <div class="input-group">
                     <label>👤 Nome de Usuário</label>
@@ -841,19 +1061,21 @@
             </div>
         </div>
         
+        <div id="muted-banner" class="muted-warning" style="display: none;">
+            🔇 Você está silenciado! Tempo restante: <span id="muted-time">--:--:--</span>
+        </div>
+        
         <div class="chat-container" id="chat-messages">
-            <div class="system-message">
-                Bem-vindo ao ChatPost Online! ☠️ Respeite todos os usuários.
-            </div>
+            <div class="system-message">Bem-vindo ao ChatPost Online! ☠️ Respeite todos os usuários.</div>
         </div>
         
         <div class="chat-input-container">
             <input type="text" id="message-input" placeholder="Digite sua mensagem..." maxlength="500">
-            <button class="btn-send" onclick="sendMessage()">➤</button>
+            <button class="btn-send" id="send-btn" onclick="sendMessage()">➤</button>
         </div>
     </div>
 
-    <!-- Overlay do Admin -->
+    <!-- Overlay -->
     <div class="overlay" id="overlay" onclick="toggleAdminPanel()"></div>
 
     <!-- Painel Admin -->
@@ -865,20 +1087,24 @@
         
         <div class="admin-controls">
             <div class="search-box">
-                <input type="text" id="user-search" placeholder="🔍 Pesquisar usuário por nome ou email..." oninput="searchUsers()">
+                <input type="text" id="user-search" placeholder="🔍 Pesquisar usuário..." oninput="searchUsers()">
             </div>
             <div class="admin-stats">
                 <div class="stat-box">
-                    <div class="stat-label">Total Usuários</div>
+                    <div class="stat-label">Total</div>
                     <div class="stat-value" id="total-users">0</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-label">Online Agora</div>
+                    <div class="stat-label">Online</div>
                     <div class="stat-value" id="online-now">0</div>
+                </div>
+                <div class="stat-box muted">
+                    <div class="stat-label">Silenciados</div>
+                    <div class="stat-value" id="muted-count" style="color: var(--neon-orange);">0</div>
                 </div>
                 <div class="stat-box banned">
                     <div class="stat-label">Banidos</div>
-                    <div class="stat-value" id="banned-count">0</div>
+                    <div class="stat-value" id="banned-count" style="color: var(--neon-red);">0</div>
                 </div>
             </div>
         </div>
@@ -886,34 +1112,71 @@
         <div class="user-list" id="user-list"></div>
     </div>
 
+    <!-- Modal de Silenciamento -->
+    <div class="modal" id="mute-modal">
+        <h3>🔇 Silenciar Usuário</h3>
+        <div class="mute-options">
+            <div class="mute-option" data-time="1">1 min</div>
+            <div class="mute-option" data-time="60">1 hr</div>
+            <div class="mute-option" data-time="120">2 hrs</div>
+            <div class="mute-option" data-time="180">3 hrs</div>
+            <div class="mute-option" data-time="480">8 hrs</div>
+            <div class="mute-option" data-time="540">9 hrs</div>
+            <div class="mute-option" data-time="720">12 hrs</div>
+            <div class="mute-option" data-time="1320">22 hrs</div>
+            <div class="mute-option" data-time="1440">1 dia</div>
+            <div class="mute-option" data-time="2880">2 dias</div>
+            <div class="mute-option" data-time="5760">4 dias</div>
+        </div>
+        <textarea id="mute-reason-input" placeholder="Motivo do silenciamento..."></textarea>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-confirm" onclick="confirmMute()">Silenciar</button>
+            <button class="modal-btn modal-cancel" onclick="closeModal('mute-modal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Renomear -->
+    <div class="modal" id="rename-modal">
+        <h3>✏️ Alterar Nome</h3>
+        <input type="text" id="new-username-input" placeholder="Novo nome de usuário" maxlength="20">
+        <div class="modal-buttons">
+            <button class="modal-btn modal-confirm" onclick="confirmRename()">Salvar</button>
+            <button class="modal-btn modal-cancel" onclick="closeModal('rename-modal')">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Modal de Deletar Mensagem -->
+    <div class="modal" id="delete-modal">
+        <h3>🗑️ Deletar Mensagem</h3>
+        <p style="color: #aaa; margin-bottom: 15px;">Tem certeza que deseja deletar esta mensagem?</p>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-confirm" onclick="confirmDelete()">Deletar</button>
+            <button class="modal-btn modal-cancel" onclick="closeModal('delete-modal')">Cancelar</button>
+        </div>
+    </div>
+
     <script>
         // ==================== CONFIGURAÇÃO FIREBASE ====================
-        // SUBSTITUA ESTES DADOS PELOS SEUS DO FIREBASE CONSOLE!
         const firebaseConfig = {
-            apiKey: "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            apiKey: "AIzaSyCXdMLj_-pWrpq96nrstCuMali4sWxXAV4",
             authDomain: "chatpost-online.firebaseapp.com",
             databaseURL: "https://chatpost-online-default-rtdb.firebaseio.com",
             projectId: "chatpost-online",
-            storageBucket: "chatpost-online.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef123456"
+            storageBucket: "chatpost-online.firebasestorage.app",
+            messagingSenderId: "599236163165",
+            appId: "1:599236163165:web:b034e71e69af2cd681bfb4"
         };
         
-        // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
         
         const ADMIN_EMAIL = 'lucinogamer3@gmail.com';
         let currentUser = null;
         let isAdmin = false;
-        let messagesRef = null;
-        let usersRef = null;
-        let bannedRef = null;
-        
-        // ==================== INICIALIZAÇÃO ====================
-        window.onload = function() {
-            checkSession();
-        };
+        let selectedUserId = null;
+        let selectedMessageId = null;
+        let muteTimer = null;
+        let checkMuteInterval = null;
         
         // ==================== AUTENTICAÇÃO ====================
         function switchTab(tab) {
@@ -921,8 +1184,6 @@
             document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tab + '-form').classList.add('active');
-            document.getElementById('login-error').classList.remove('show');
-            document.getElementById('register-error').classList.remove('show');
         }
         
         function showError(id, msg) {
@@ -943,31 +1204,24 @@
             if (!/^[a-zA-Z0-9\s_]+$/.test(username)) return showError('register-error', 'Nome inválido');
             if (password !== password2) return showError('register-error', 'Senhas não coincidem');
             
-            // Verificar se email existe no Firebase
+            // Verificar se existe
             db.ref('users').orderByChild('email').equalTo(email).once('value', snapshot => {
-                if (snapshot.exists()) {
-                    showError('register-error', 'Email já cadastrado');
-                    return;
-                }
+                if (snapshot.exists()) return showError('register-error', 'Email já cadastrado');
                 
-                // Verificar nome
                 db.ref('users').orderByChild('username').equalTo(username).once('value', snap => {
-                    if (snap.exists()) {
-                        showError('register-error', 'Nome de usuário já existe');
-                        return;
-                    }
+                    if (snap.exists()) return showError('register-error', 'Nome já existe');
                     
-                    // Criar usuário
                     const userId = db.ref().push().key;
                     const newUser = {
                         id: userId,
                         username: username,
                         email: email,
-                        password: password, // Em produção use hash!
+                        password: password,
                         avatar: `https://ui-avatars.com/api/?name=${username}&background=random&color=fff`,
                         createdAt: Date.now(),
                         isOnline: true,
-                        lastSeen: Date.now()
+                        lastSeen: Date.now(),
+                        isAdmin: false
                     };
                     
                     db.ref('users/' + userId).set(newUser);
@@ -984,16 +1238,12 @@
             // Verificar ban
             db.ref('banned').orderByChild('email').equalTo(email).once('value', bannedSnap => {
                 if (bannedSnap.exists()) {
-                    showError('login-error', 'Esta conta foi banida permanentemente');
+                    showError('login-error', 'Conta banida permanentemente');
                     return;
                 }
                 
-                // Buscar usuário
                 db.ref('users').orderByChild('email').equalTo(email).once('value', snapshot => {
-                    if (!snapshot.exists()) {
-                        showError('login-error', 'Email ou senha incorretos');
-                        return;
-                    }
+                    if (!snapshot.exists()) return showError('login-error', 'Email ou senha incorretos');
                     
                     let user = null;
                     snapshot.forEach(child => {
@@ -1001,12 +1251,8 @@
                         if (user.password !== password) user = null;
                     });
                     
-                    if (!user) {
-                        showError('login-error', 'Email ou senha incorretos');
-                        return;
-                    }
+                    if (!user) return showError('login-error', 'Email ou senha incorretos');
                     
-                    // Atualizar status
                     db.ref('users/' + user.id).update({ isOnline: true, lastSeen: Date.now() });
                     loginUser(user);
                 });
@@ -1016,7 +1262,15 @@
         function loginUser(user) {
             currentUser = user;
             isAdmin = (user.email === ADMIN_EMAIL);
+            if (isAdmin) {
+                db.ref('users/' + user.id).update({ isAdmin: true });
+                currentUser.isAdmin = true;
+            }
+            
             localStorage.setItem('chatpost_session', JSON.stringify({ id: user.id, email: user.email }));
+            
+            // Verificar silenciamento
+            checkIfMuted();
             enterChat();
         }
         
@@ -1042,25 +1296,66 @@
                     currentUser = user;
                     isAdmin = (user.email === ADMIN_EMAIL);
                     db.ref('users/' + user.id).update({ isOnline: true, lastSeen: Date.now() });
+                    checkIfMuted();
                     enterChat();
                 });
             });
         }
         
-        function logout() {
-            if (currentUser) {
-                db.ref('users/' + currentUser.id).update({ isOnline: false, lastSeen: Date.now() });
-            }
-            localStorage.removeItem('chatpost_session');
-            location.reload();
+        function checkIfMuted() {
+            if (!currentUser) return;
+            
+            db.ref('muted').orderByChild('email').equalTo(currentUser.email).once('value', snapshot => {
+                if (!snapshot.exists()) return;
+                
+                snapshot.forEach(child => {
+                    const muteData = child.val();
+                    const now = Date.now();
+                    
+                    if (now < muteData.until) {
+                        showMuteScreen(muteData);
+                    } else {
+                        // Remover silenciamento expirado
+                        child.ref.remove();
+                    }
+                });
+            });
         }
         
-        function forceLogout() {
-            localStorage.removeItem('chatpost_session');
-            location.reload();
+        function showMuteScreen(muteData) {
+            document.getElementById('mute-screen').style.display = 'flex';
+            document.getElementById('chat-screen').style.display = 'none';
+            document.getElementById('auth-screen').style.display = 'none';
+            
+            document.getElementById('mute-reason-text').textContent = muteData.reason || 'Não especificado';
+            
+            // Atualizar timer
+            updateMuteTimer(muteData.until);
+            muteTimer = setInterval(() => updateMuteTimer(muteData.until), 1000);
+            
+            // Verificar quando acabar
+            checkMuteInterval = setInterval(() => {
+                const now = Date.now();
+                if (now >= muteData.until) {
+                    clearInterval(muteTimer);
+                    clearInterval(checkMuteInterval);
+                    location.reload();
+                }
+            }, 5000);
         }
         
-        // ==================== CHAT ====================
+        function updateMuteTimer(until) {
+            const now = Date.now();
+            const diff = Math.max(0, until - now);
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('mute-timer').textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
         function enterChat() {
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('chat-screen').style.display = 'flex';
@@ -1071,57 +1366,122 @@
                 document.getElementById('admin-btn').style.display = 'flex';
             }
             
-            // Conectar aos dados em tempo real
-            messagesRef = db.ref('messages');
-            usersRef = db.ref('users');
-            bannedRef = db.ref('banned');
+            // Verificar silenciamento ativo
+            checkActiveMute();
             
-            // Ouvir mensagens
-            messagesRef.limitToLast(50).on('child_added', snapshot => {
-                const msg = snapshot.val();
-                if (!msg.banned) {
-                    addMessageToDOM(msg, msg.userId === currentUser.id);
-                }
-            });
-            
-            // Contar online
-            usersRef.on('value', snapshot => {
-                let online = 0;
-                snapshot.forEach(child => {
-                    if (child.val().isOnline) online++;
-                });
-                document.getElementById('online-count').textContent = `● ${online} online`;
-                document.getElementById('total-users').textContent = snapshot.numChildren();
-            });
-            
-            // Verificar ban em tempo real
-            bannedRef.on('value', snapshot => {
-                snapshot.forEach(child => {
-                    if (child.val().email === currentUser.email) {
-                        showBanScreen();
-                    }
-                });
-                document.getElementById('banned-count').textContent = snapshot.numChildren();
-            });
-            
+            // Conectar ao chat
+            setupChatListeners();
             addSystemMessage(`${currentUser.username} entrou no chat! ☠️`);
         }
         
-        function addMessageToDOM(msg, isOwn = false) {
+        function checkActiveMute() {
+            if (!currentUser) return;
+            
+            db.ref('muted').orderByChild('email').equalTo(currentUser.email).on('value', snapshot => {
+                if (!snapshot.exists()) {
+                    document.getElementById('muted-banner').style.display = 'none';
+                    document.getElementById('message-input').disabled = false;
+                    document.getElementById('send-btn').disabled = false;
+                    return;
+                }
+                
+                snapshot.forEach(child => {
+                    const muteData = child.val();
+                    const now = Date.now();
+                    
+                    if (now < muteData.until) {
+                        document.getElementById('muted-banner').style.display = 'block';
+                        document.getElementById('message-input').disabled = true;
+                        document.getElementById('send-btn').disabled = true;
+                        
+                        // Atualizar timer no banner
+                        const updateBanner = () => {
+                            const diff = Math.max(0, muteData.until - Date.now());
+                            const hours = Math.floor(diff / (1000 * 60 * 60));
+                            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                            document.getElementById('muted-time').textContent = 
+                                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                        };
+                        updateBanner();
+                        setInterval(updateBanner, 1000);
+                    } else {
+                        child.ref.remove();
+                    }
+                });
+            });
+        }
+        
+        function setupChatListeners() {
+            // Mensagens
+            db.ref('messages').limitToLast(50).on('child_added', snapshot => {
+                const msg = snapshot.val();
+                if (!msg.deleted) {
+                    const isOwn = msg.userId === currentUser?.id;
+                    const isMsgAdmin = msg.isAdmin || false;
+                    addMessageToDOM(snapshot.key, msg, isOwn, isMsgAdmin);
+                }
+            });
+            
+            // Mensagens deletadas
+            db.ref('messages').on('child_changed', snapshot => {
+                const msg = snapshot.val();
+                if (msg.deleted) {
+                    const el = document.getElementById('msg-' + snapshot.key);
+                    if (el) {
+                        el.innerHTML = '<div class="system-message">🗑️ Mensagem deletada</div>';
+                    }
+                }
+            });
+            
+            // Contador online
+            db.ref('users').on('value', snapshot => {
+                let online = 0;
+                let total = 0;
+                snapshot.forEach(child => {
+                    total++;
+                    if (child.val().isOnline) online++;
+                });
+                document.getElementById('online-count').textContent = `● ${online} online`;
+            });
+            
+            // Verificar ban em tempo real
+            if (currentUser) {
+                db.ref('banned').orderByChild('email').equalTo(currentUser.email).on('value', snapshot => {
+                    if (snapshot.exists()) showBanScreen();
+                });
+            }
+        }
+        
+        function addMessageToDOM(msgId, msg, isOwn, isMsgAdmin) {
             const container = document.getElementById('chat-messages');
             const div = document.createElement('div');
+            div.id = 'msg-' + msgId;
             div.className = `message ${isOwn ? 'own-message' : ''}`;
             
             const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+            const adminTag = isMsgAdmin ? '<span class="admin-tag">[ADMIN]</span>' : '';
+            
+            let menuHtml = '';
+            if (isAdmin && !isOwn) {
+                menuHtml = `
+                    <div class="message-menu">
+                        <button class="menu-btn" onclick="showDeleteModal('${msgId}')">⋮</button>
+                    </div>
+                `;
+            }
             
             div.innerHTML = `
                 <div class="message-header">
                     ${!isOwn ? `<img src="${msg.avatar}" class="message-avatar">` : ''}
-                    <span class="message-author">${escapeHtml(msg.username)}</span>
+                    <span class="message-author">${escapeHtml(msg.username)}${adminTag}</span>
                     <span class="message-time">${time}</span>
                     ${isOwn ? `<img src="${currentUser.avatar}" class="message-avatar">` : ''}
                 </div>
-                <div class="message-content">${escapeHtml(msg.text)}</div>
+                <div class="message-content">
+                    ${menuHtml}
+                    ${escapeHtml(msg.text)}
+                </div>
             `;
             
             container.appendChild(div);
@@ -1142,11 +1502,15 @@
             const text = input.value.trim();
             if (!text || !currentUser) return;
             
-            // Verificar ban
-            db.ref('banned').orderByChild('email').equalTo(currentUser.email).once('value', snapshot => {
+            // Verificar silenciamento
+            db.ref('muted').orderByChild('email').equalTo(currentUser.email).once('value', snapshot => {
                 if (snapshot.exists()) {
-                    showBanScreen();
-                    return;
+                    snapshot.forEach(child => {
+                        if (Date.now() < child.val().until) {
+                            alert('Você está silenciado!');
+                            return;
+                        }
+                    });
                 }
                 
                 const msg = {
@@ -1154,17 +1518,18 @@
                     username: currentUser.username,
                     email: currentUser.email,
                     avatar: currentUser.avatar,
+                    isAdmin: isAdmin,
                     text: text,
                     timestamp: Date.now(),
-                    banned: false
+                    deleted: false
                 };
                 
-                messagesRef.push(msg);
+                db.ref('messages').push(msg);
                 input.value = '';
             });
         }
         
-        // ==================== ADMIN ====================
+        // ==================== ADMIN PANEL ====================
         function toggleAdminPanel() {
             if (!isAdmin) return;
             const panel = document.getElementById('admin-panel');
@@ -1181,77 +1546,197 @@
         }
         
         function loadAdminData() {
-            db.ref('users').once('value', snapshot => {
-                const users = [];
-                snapshot.forEach(child => users.push(child.val()));
-                renderUserList(users);
-            });
+            // Atualizar a cada 1 minuto
+            updateAdminStats();
+            setInterval(updateAdminStats, 60000);
         }
         
-        function renderUserList(users, filter = '') {
+        function updateAdminStats() {
+            db.ref('users').once('value', snapshot => {
+                let online = 0;
+                let total = 0;
+                snapshot.forEach(() => total++);
+                snapshot.forEach(child => { if (child.val().isOnline) online++; });
+                
+                document.getElementById('total-users').textContent = total;
+                document.getElementById('online-now').textContent = online;
+            });
+            
+            db.ref('banned').once('value', snapshot => {
+                document.getElementById('banned-count').textContent = snapshot.numChildren();
+            });
+            
+            db.ref('muted').once('value', snapshot => {
+                document.getElementById('muted-count').textContent = snapshot.numChildren();
+            });
+            
+            renderUserList();
+        }
+        
+        function renderUserList(filter = '') {
             const list = document.getElementById('user-list');
             list.innerHTML = '';
             
-            // Filtrar
-            if (filter) {
-                const f = filter.toLowerCase();
-                users = users.filter(u => 
-                    u.username.toLowerCase().includes(f) || 
-                    u.email.toLowerCase().includes(f)
-                );
-            }
-            
-            // Ordenar: online primeiro
-            users.sort((a, b) => (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0));
-            
-            // Verificar banidos
-            db.ref('banned').once('value', bannedSnap => {
-                const banned = [];
-                bannedSnap.forEach(b => banned.push(b.val().email));
-                
-                users.forEach(u => {
-                    const isBanned = banned.includes(u.email);
-                    const div = document.createElement('div');
-                    div.className = `user-item ${isBanned ? 'banned' : ''}`;
-                    
-                    const status = isBanned ? 'BANIDO' : (u.isOnline ? 'ONLINE' : 'OFFLINE');
-                    const statusClass = isBanned ? 'status-banned' : (u.isOnline ? 'status-online' : 'status-offline');
-                    
-                    div.innerHTML = `
-                        <div class="user-item-info">
-                            <img src="${u.avatar}" class="user-item-avatar">
-                            <div class="user-item-details">
-                                <h4>${escapeHtml(u.username)}</h4>
-                                <p>${escapeHtml(u.email)}</p>
-                            </div>
-                        </div>
-                        <div class="user-item-status">
-                            <span class="status-badge ${statusClass}">${status}</span>
-                            ${isBanned ? 
-                                `<button class="unban-btn" onclick="unbanUser('${u.email}', '${u.username}')">✓ Desbanir</button>` :
-                                `<button class="ban-btn" onclick="banUser('${u.email}', '${u.username}')">✕ Banir</button>`
+            db.ref('users').once('value', usersSnap => {
+                db.ref('banned').once('value', bannedSnap => {
+                    db.ref('muted').once('value', mutedSnap => {
+                        const banned = {};
+                        bannedSnap.forEach(b => { banned[b.val().email] = b.val(); });
+                        
+                        const muted = {};
+                        mutedSnap.forEach(m => { 
+                            if (Date.now() < m.val().until) {
+                                muted[m.val().email] = m.val(); 
                             }
-                        </div>
-                    `;
-                    list.appendChild(div);
+                        });
+                        
+                        let users = [];
+                        usersSnap.forEach(child => {
+                            const u = child.val();
+                            u.isBanned = !!banned[u.email];
+                            u.isMuted = !!muted[u.email];
+                            u.muteData = muted[u.email];
+                            u.banData = banned[u.email];
+                            users.push(u);
+                        });
+                        
+                        // Filtrar
+                        if (filter) {
+                            const f = filter.toLowerCase();
+                            users = users.filter(u => 
+                                u.username.toLowerCase().includes(f) || 
+                                u.email.toLowerCase().includes(f)
+                            );
+                        }
+                        
+                        // Ordenar: online primeiro
+                        users.sort((a, b) => (b.isOnline ? 1 : 0) - (a.isOnline ? 1 : 0));
+                        
+                        users.forEach(u => {
+                            const div = document.createElement('div');
+                            div.className = `user-item ${u.isBanned ? 'banned' : ''} ${u.isMuted ? 'muted' : ''}`;
+                            
+                            let status = 'OFFLINE';
+                            let statusClass = 'status-offline';
+                            if (u.isBanned) { status = 'BANIDO'; statusClass = 'status-banned'; }
+                            else if (u.isMuted) { status = 'SILENCIADO'; statusClass = 'status-muted'; }
+                            else if (u.isOnline) { status = 'ONLINE'; statusClass = 'status-online'; }
+                            
+                            const adminBadge = u.isAdmin ? '<span class="admin-tag">[ADMIN]</span>' : '';
+                            
+                            let actions = '';
+                            if (u.email !== ADMIN_EMAIL) {
+                                if (u.isMuted) {
+                                    actions += `<button class="action-btn btn-unmute" onclick="unmuteUser('${u.email}')">🔊 Desmutar</button>`;
+                                } else {
+                                    actions += `<button class="action-btn btn-mute" onclick="showMuteModal('${u.id}', '${u.email}')">🔇 Silenciar</button>`;
+                                }
+                                
+                                if (u.isBanned) {
+                                    actions += `<button class="action-btn btn-unban" onclick="unbanUser('${u.email}')">✓ Desbanir</button>`;
+                                } else {
+                                    actions += `<button class="action-btn btn-ban" onclick="banUser('${u.email}', '${u.username}')">✕ Banir</button>`;
+                                }
+                                
+                                actions += `<button class="action-btn btn-rename" onclick="showRenameModal('${u.id}', '${u.username}')">✏️ Renomear</button>`;
+                            }
+                            
+                            div.innerHTML = `
+                                <div class="user-item-header">
+                                    <div class="user-item-info">
+                                        <img src="${u.avatar}" class="user-item-avatar">
+                                        <div class="user-item-details">
+                                            <h4>${escapeHtml(u.username)} ${adminBadge}</h4>
+                                            <p>${escapeHtml(u.email)}</p>
+                                        </div>
+                                    </div>
+                                    <span class="status-badge ${statusClass}">${status}</span>
+                                </div>
+                                <div class="user-actions">${actions}</div>
+                            `;
+                            
+                            list.appendChild(div);
+                        });
+                    });
                 });
             });
         }
         
         function searchUsers() {
-            const filter = document.getElementById('user-search').value;
-            db.ref('users').once('value', snapshot => {
-                const users = [];
-                snapshot.forEach(child => users.push(child.val()));
-                renderUserList(users, filter);
+            renderUserList(document.getElementById('user-search').value);
+        }
+        
+        // ==================== MODAIS ====================
+        function showMuteModal(userId, email) {
+            selectedUserId = { id: userId, email: email };
+            document.getElementById('mute-modal').style.display = 'block';
+            
+            // Selecionar opção
+            document.querySelectorAll('.mute-option').forEach(opt => {
+                opt.onclick = () => {
+                    document.querySelectorAll('.mute-option').forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                };
             });
         }
         
+        function confirmMute() {
+            const selected = document.querySelector('.mute-option.selected');
+            if (!selected) return alert('Selecione um tempo!');
+            
+            const minutes = parseInt(selected.dataset.time);
+            const reason = document.getElementById('mute-reason-input').value || 'Não especificado';
+            const until = Date.now() + (minutes * 60 * 1000);
+            
+            db.ref('muted').push({
+                userId: selectedUserId.id,
+                email: selectedUserId.email,
+                reason: reason,
+                until: until,
+                mutedBy: currentUser.email,
+                mutedAt: Date.now()
+            });
+            
+            closeModal('mute-modal');
+            addSystemMessage(`🔇 ${selectedUserId.email} foi silenciado por ${minutes} minutos!`);
+            renderUserList();
+        }
+        
+        function unmuteUser(email) {
+            if (!confirm('Desmutar este usuário?')) return;
+            
+            db.ref('muted').orderByChild('email').equalTo(email).once('value', snapshot => {
+                snapshot.forEach(child => child.ref.remove());
+                addSystemMessage(`🔊 ${email} foi desmutado!`);
+                renderUserList();
+            });
+        }
+        
+        function showRenameModal(userId, currentName) {
+            selectedUserId = { id: userId, currentName: currentName };
+            document.getElementById('new-username-input').value = currentName;
+            document.getElementById('rename-modal').style.display = 'block';
+        }
+        
+        function confirmRename() {
+            const newName = document.getElementById('new-username-input').value.trim();
+            if (!newName || newName.length < 3) return alert('Nome inválido!');
+            
+            db.ref('users/' + selectedUserId.id).update({ username: newName });
+            
+            // Atualizar mensagens antigas
+            db.ref('messages').orderByChild('userId').equalTo(selectedUserId.id).once('value', snapshot => {
+                snapshot.forEach(child => {
+                    child.ref.update({ username: newName });
+                });
+            });
+            
+            closeModal('rename-modal');
+            addSystemMessage(`✏️ ${selectedUserId.currentName} foi renomeado para ${newName}!`);
+            renderUserList();
+        }
+        
         function banUser(email, username) {
-            if (email === ADMIN_EMAIL) {
-                alert('Não pode banir o administrador!');
-                return;
-            }
             if (!confirm(`Banir permanentemente ${username}?`)) return;
             
             db.ref('banned').push({
@@ -1261,32 +1746,58 @@
                 bannedBy: currentUser.email
             });
             
-            // Marcar mensagens como banidas
-            db.ref('messages').orderByChild('email').equalTo(email).once('value', snapshot => {
+            // Desconectar usuário
+            db.ref('users').orderByChild('email').equalTo(email).once('value', snapshot => {
                 snapshot.forEach(child => {
-                    child.ref.update({ banned: true });
+                    child.ref.update({ isOnline: false });
                 });
             });
             
-            loadAdminData();
             addSystemMessage(`🔨 ${username} foi banido permanentemente!`);
+            renderUserList();
         }
         
-        function unbanUser(email, username) {
-            if (!confirm(`Desbanir ${username}?`)) return;
+        function unbanUser(email) {
+            if (!confirm('Desbanir este usuário?')) return;
             
             db.ref('banned').orderByChild('email').equalTo(email).once('value', snapshot => {
                 snapshot.forEach(child => child.ref.remove());
+                addSystemMessage(`✅ ${email} foi desbanido!`);
+                renderUserList();
             });
-            
-            loadAdminData();
-            addSystemMessage(`✅ ${username} foi desbanido!`);
+        }
+        
+        function showDeleteModal(msgId) {
+            selectedMessageId = msgId;
+            document.getElementById('delete-modal').style.display = 'block';
+        }
+        
+        function confirmDelete() {
+            db.ref('messages/' + selectedMessageId).update({ deleted: true, deletedBy: currentUser.email, deletedAt: Date.now() });
+            closeModal('delete-modal');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
         
         function showBanScreen() {
             document.getElementById('ban-screen').style.display = 'flex';
             document.getElementById('chat-screen').style.display = 'none';
             document.getElementById('auth-screen').style.display = 'none';
+        }
+        
+        function logout() {
+            if (currentUser) {
+                db.ref('users/' + currentUser.id).update({ isOnline: false, lastSeen: Date.now() });
+            }
+            localStorage.removeItem('chatpost_session');
+            location.reload();
+        }
+        
+        function forceLogout() {
+            localStorage.removeItem('chatpost_session');
+            location.reload();
         }
         
         function escapeHtml(text) {
@@ -1300,7 +1811,8 @@
             if (e.key === 'Enter') sendMessage();
         });
         
-        // Cleanup ao sair
+        window.onload = checkSession;
+        
         window.onbeforeunload = () => {
             if (currentUser) {
                 db.ref('users/' + currentUser.id).update({ isOnline: false, lastSeen: Date.now() });
