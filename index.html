@@ -18,6 +18,7 @@
             --neon-purple: #bf00ff;
             --neon-yellow: #ffff00;
             --neon-orange: #ff6600;
+            --neon-pink: #ff00ff;
             --dark-bg: #0a0a0a;
             --darker-bg: #050505;
             --glass: rgba(255, 255, 255, 0.05);
@@ -359,6 +360,390 @@
             font-size: 0.9rem;
             font-weight: 700;
             color: #000;
+        }
+        
+        /* Botão DM */
+        .dm-btn {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+            animation: glow-dm 2s infinite;
+        }
+        
+        @keyframes glow-dm {
+            0%, 100% { box-shadow: 0 0 10px var(--neon-pink); }
+            50% { box-shadow: 0 0 25px var(--neon-purple); }
+        }
+        
+        .dm-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .dm-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--neon-red);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            animation: pulse 1s infinite;
+        }
+        
+        /* Menu DM Dropdown */
+        .dm-menu {
+            display: none;
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background: rgba(10, 10, 10, 0.98);
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            z-index: 2500;
+            flex-direction: column;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+        
+        .dm-menu.show {
+            display: flex;
+        }
+        
+        .dm-menu-header {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            padding: 15px;
+            border-radius: 13px 13px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dm-menu-header h3 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        
+        .close-dm-menu {
+            background: none;
+            border: 2px solid #fff;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .close-dm-menu:hover {
+            background: #fff;
+            color: #000;
+            transform: rotate(90deg);
+        }
+        
+        .dm-search-box {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dm-search-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-pink);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        
+        .dm-search-input:focus {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 15px rgba(191, 0, 255, 0.3);
+        }
+        
+        .dm-search-results {
+            max-height: 150px;
+            overflow-y: auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dm-search-item {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .dm-search-item:hover {
+            background: rgba(255, 0, 255, 0.1);
+        }
+        
+        .dm-search-item img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-pink);
+        }
+        
+        .dm-search-item span {
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        .dm-conversations {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .dm-conversation-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            position: relative;
+        }
+        
+        .dm-conversation-item:hover {
+            background: rgba(255, 0, 255, 0.1);
+            border-color: var(--neon-pink);
+            transform: translateX(5px);
+        }
+        
+        .dm-conversation-item.unread {
+            border-color: var(--neon-red);
+            background: rgba(255, 7, 58, 0.1);
+        }
+        
+        .dm-conversation-item img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-blue);
+        }
+        
+        .dm-conversation-item.unread img {
+            border-color: var(--neon-red);
+            animation: pulse-border 2s infinite;
+        }
+        
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 5px var(--neon-red); }
+            50% { box-shadow: 0 0 20px var(--neon-red); }
+        }
+        
+        .dm-conversation-info {
+            flex: 1;
+        }
+        
+        .dm-conversation-name {
+            font-weight: 700;
+            color: var(--neon-blue);
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .dm-conversation-preview {
+            font-size: 0.85rem;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        .dm-conversation-time {
+            font-size: 0.75rem;
+            color: #666;
+        }
+        
+        .dm-unread-count {
+            background: var(--neon-red);
+            color: #fff;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        
+        /* Janela de Chat DM */
+        .dm-chat-window {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            height: 500px;
+            background: rgba(10, 10, 10, 0.98);
+            border: 2px solid var(--neon-pink);
+            border-radius: 20px;
+            z-index: 2600;
+            flex-direction: column;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.4);
+        }
+        
+        .dm-chat-window.show {
+            display: flex;
+        }
+        
+        .dm-chat-header {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            padding: 15px;
+            border-radius: 18px 18px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .dm-chat-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .dm-chat-user img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        
+        .dm-chat-user span {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .dm-chat-close {
+            background: none;
+            border: 2px solid #fff;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .dm-chat-close:hover {
+            background: #fff;
+            color: #000;
+        }
+        
+        .dm-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background: var(--darker-bg);
+        }
+        
+        .dm-message {
+            margin-bottom: 12px;
+            max-width: 80%;
+            animation: messageSlide 0.3s ease;
+        }
+        
+        .dm-message.own {
+            margin-left: auto;
+            text-align: right;
+        }
+        
+        .dm-message-content {
+            background: var(--glass);
+            padding: 10px 15px;
+            border-radius: 15px;
+            border-left: 3px solid var(--neon-pink);
+            word-wrap: break-word;
+            display: inline-block;
+        }
+        
+        .dm-message.own .dm-message-content {
+            border-left-color: var(--neon-green);
+            background: rgba(57, 255, 20, 0.1);
+        }
+        
+        .dm-message-time {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 3px;
+        }
+        
+        .dm-chat-input-container {
+            padding: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .dm-chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 15px;
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        
+        .dm-chat-input:focus {
+            border-color: var(--neon-pink);
+        }
+        
+        .dm-chat-send {
+            background: var(--neon-pink);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: #fff;
+            font-size: 1.2rem;
+        }
+        
+        .dm-chat-send:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--neon-pink);
         }
         
         #admin-panel {
@@ -849,6 +1234,51 @@
         ::-webkit-scrollbar-track { background: var(--darker-bg); }
         ::-webkit-scrollbar-thumb { background: var(--neon-green); border-radius: 3px; }
         
+        /* Notificação toast */
+        .toast-notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid var(--neon-pink);
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 2700;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            cursor: pointer;
+        }
+        
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+        
+        .toast-notification img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--neon-pink);
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 700;
+            color: var(--neon-pink);
+            margin-bottom: 3px;
+        }
+        
+        .toast-text {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
         @media (max-width: 768px) {
             .logo { font-size: 2rem; }
             .chat-header { flex-direction: column; padding: 10px; }
@@ -857,6 +1287,20 @@
             #admin-panel { width: 98%; height: 95vh; }
             .admin-stats { gap: 10px; }
             .stat-box { padding: 8px 12px; min-width: 80px; }
+            
+            .dm-menu {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+                max-height: 70vh;
+            }
+            
+            .dm-chat-window {
+                width: 90%;
+                right: 5%;
+                left: 5%;
+                height: 60vh;
+            }
         }
     </style>
 </head>
@@ -935,6 +1379,12 @@
                 <button class="admin-btn" id="admin-btn" onclick="toggleAdminPanel()" style="display: none;">👑 Admin</button>
             </div>
             <div class="user-info">
+                <!-- Botão DM -->
+                <button class="dm-btn" id="dm-btn" onclick="toggleDMMenu()">
+                    💬 DM
+                    <span class="dm-badge" id="dm-badge" style="display: none;">0</span>
+                </button>
+                
                 <span class="online-count" id="online-count">● 0</span>
                 <span class="username-display" id="display-username">User</span>
                 <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
@@ -953,6 +1403,48 @@
         <div class="chat-input-container">
             <input type="text" id="message-input" placeholder="Digite sua mensagem..." maxlength="500">
             <button class="btn-send" id="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- Menu DM Dropdown -->
+    <div class="dm-menu" id="dm-menu">
+        <div class="dm-menu-header">
+            <h3>💬 Mensagens Diretas</h3>
+            <button class="close-dm-menu" onclick="toggleDMMenu()">×</button>
+        </div>
+        <div class="dm-search-box">
+            <input type="text" class="dm-search-input" id="dm-search-input" placeholder="🔍 Buscar usuário..." oninput="searchUsersForDM()">
+        </div>
+        <div class="dm-search-results" id="dm-search-results"></div>
+        <div class="dm-conversations" id="dm-conversations">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                Nenhuma conversa ainda.<br>Busque um usuário acima para começar!
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela de Chat DM -->
+    <div class="dm-chat-window" id="dm-chat-window">
+        <div class="dm-chat-header">
+            <div class="dm-chat-user">
+                <img src="" alt="" id="dm-chat-avatar">
+                <span id="dm-chat-username">Usuário</span>
+            </div>
+            <button class="dm-chat-close" onclick="closeDMChat()">×</button>
+        </div>
+        <div class="dm-chat-messages" id="dm-chat-messages"></div>
+        <div class="dm-chat-input-container">
+            <input type="text" class="dm-chat-input" id="dm-chat-input" placeholder="Digite sua mensagem..." onkeypress="if(event.key==='Enter')sendDMMessage()">
+            <button class="dm-chat-send" onclick="sendDMMessage()">➤</button>
+        </div>
+    </div>
+
+    <!-- Notificação Toast -->
+    <div class="toast-notification" id="toast-notification" onclick="openDMFromToast()">
+        <img src="" alt="" id="toast-avatar">
+        <div class="toast-content">
+            <div class="toast-title" id="toast-title">Nova mensagem</div>
+            <div class="toast-text" id="toast-text">...</div>
         </div>
     </div>
 
@@ -1057,6 +1549,13 @@
         let statsInterval = null;
         let heartbeatInterval = null;
         let presenceRef = null;
+        
+        // Variáveis DM
+        let currentDMPartner = null;
+        let dmListeners = {};
+        let conversationsCache = {};
+        let unreadDMs = 0;
+        let toastTimeout = null;
         
         // Auth
         function switchTab(tab) {
@@ -1245,27 +1744,23 @@
             setupPresence();
             setupMuteListener();
             setupChat();
+            setupDMListener();
         }
         
-        // NOVO: Sistema de presença real (apenas online quando está no site)
         function setupPresence() {
             if (!currentUser) return;
             
             const userId = currentUser.id;
             const userStatusRef = db.ref('users/' + userId);
-            
-            // Referência para o servidor de timestamp
             const connectedRef = db.ref('.info/connected');
             
             connectedRef.on('value', (snap) => {
                 if (snap.val() === true) {
-                    // Quando conecta, marca como online
                     userStatusRef.update({
                         isOnline: true,
                         lastSeen: firebase.database.ServerValue.TIMESTAMP
                     });
                     
-                    // Quando desconectar (fechar aba, internet cair, etc), marca como offline
                     userStatusRef.onDisconnect().update({
                         isOnline: false,
                         lastSeen: firebase.database.ServerValue.TIMESTAMP
@@ -1273,7 +1768,6 @@
                 }
             });
             
-            // Heartbeat a cada 30 segundos para manter online
             heartbeatInterval = setInterval(() => {
                 if (currentUser) {
                     userStatusRef.update({
@@ -1283,7 +1777,6 @@
                 }
             }, 30000);
             
-            // Limpar quando mudar de página
             window.addEventListener('beforeunload', () => {
                 if (currentUser) {
                     userStatusRef.update({
@@ -1293,12 +1786,8 @@
                 }
             });
             
-            // Detectar quando a aba fica inativa/ativa
             document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    // Aba minimizada ou trocada - mantém online por enquanto
-                } else {
-                    // Voltou para a aba - atualiza timestamp
+                if (!document.hidden) {
                     userStatusRef.update({
                         isOnline: true,
                         lastSeen: firebase.database.ServerValue.TIMESTAMP
@@ -1345,7 +1834,6 @@
         }
         
         function setupChat() {
-            // Limpa mensagens deletadas antigas (mais de 1 hora)
             const oneHourAgo = Date.now() - (60 * 60 * 1000);
             db.ref('messages').orderByChild('timestamp').endAt(oneHourAgo).once('value', snap => {
                 snap.forEach(child => {
@@ -1356,42 +1844,32 @@
                 });
             });
 
-            // Listen novas mensagens - NÃO mostra mensagens deletadas
             db.ref('messages').limitToLast(50).on('child_added', snap => {
                 const msg = snap.val();
-                
-                // Não mostra mensagens deletadas
                 if (msg.deleted) return;
-                
                 const isOwn = msg.userId === currentUser?.id;
                 renderMessage(snap.key, msg, isOwn, msg.isAdmin || false);
             });
             
-            // Quando uma mensagem é marcada como deletada, remove ela da tela
             db.ref('messages').on('child_changed', snap => {
                 const msg = snap.val();
                 const el = document.getElementById('msg-' + snap.key);
-                
                 if (msg.deleted && el) {
-                    // Remove o elemento completamente em vez de mostrar "deletada"
                     el.remove();
                 }
             });
             
-            // Quando admin remove completamente
             db.ref('messages').on('child_removed', snap => {
                 const el = document.getElementById('msg-' + snap.key);
                 if (el) el.remove();
             });
             
-            // Online count - agora verifica lastSeen também (online nos últimos 2 minutos)
             db.ref('users').on('value', snap => {
                 let online = 0;
                 const twoMinutesAgo = Date.now() - (2 * 60 * 1000);
                 
                 snap.forEach(child => {
                     const user = child.val();
-                    // Considera online se isOnline=true E lastSeen nos últimos 2 minutos
                     if (user.isOnline && user.lastSeen > twoMinutesAgo) {
                         online++;
                     }
@@ -1399,7 +1877,6 @@
                 document.getElementById('online-count').textContent = `● ${online}`;
             });
             
-            // Ban check
             if (currentUser) {
                 db.ref('banned/' + currentUser.email.replace(/\./g, '_')).on('value', snap => {
                     if (snap.exists()) showBanScreen();
@@ -1409,8 +1886,363 @@
             addSystemMessage(`${currentUser.username} entrou no chat!`);
         }
         
+        // Sistema de DM - Setup listener
+        function setupDMListener() {
+            if (!currentUser) return;
+            
+            db.ref('userConversations/' + currentUser.id).on('value', snap => {
+                conversationsCache = {};
+                unreadDMs = 0;
+                
+                snap.forEach(child => {
+                    const conv = child.val();
+                    conversationsCache[child.key] = conv;
+                    
+                    if (conv.unreadCount > 0 && conv.lastMessageSender !== currentUser.id) {
+                        unreadDMs += conv.unreadCount;
+                    }
+                });
+                
+                updateDMBadge();
+                renderConversationsList();
+            });
+            
+            // Listener para notificações de novas mensagens
+            db.ref('userConversations/' + currentUser.id).on('child_changed', snap => {
+                const conv = snap.val();
+                if (conv.unreadCount > 0 && conv.lastMessageSender !== currentUser.id) {
+                    // Verifica se não é o chat atual
+                    if (!currentDMPartner || currentDMPartner.conversationId !== snap.key) {
+                        // Busca info do remetente
+                        db.ref('users/' + conv.lastMessageSender).once('value', userSnap => {
+                            if (userSnap.exists()) {
+                                const user = userSnap.val();
+                                showToastNotification(user.username, user.avatar, conv.lastMessage, snap.key);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        
+        function updateDMBadge() {
+            const badge = document.getElementById('dm-badge');
+            if (unreadDMs > 0) {
+                badge.textContent = unreadDMs > 99 ? '99+' : unreadDMs;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        
+        function toggleDMMenu() {
+            const menu = document.getElementById('dm-menu');
+            const isOpen = menu.classList.contains('show');
+            
+            if (isOpen) {
+                menu.classList.remove('show');
+            } else {
+                menu.classList.add('show');
+                renderConversationsList();
+                document.getElementById('dm-search-input').focus();
+            }
+        }
+        
+        function searchUsersForDM() {
+            const query = document.getElementById('dm-search-input').value.trim().toLowerCase();
+            const resultsDiv = document.getElementById('dm-search-results');
+            
+            if (query.length < 2) {
+                resultsDiv.innerHTML = '';
+                return;
+            }
+            
+            db.ref('users').orderByChild('username').startAt(query).endAt(query + '\uf8ff').limitToFirst(10).once('value', snap => {
+                resultsDiv.innerHTML = '';
+                
+                snap.forEach(child => {
+                    const user = child.val();
+                    if (user.id === currentUser.id) return;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'dm-search-item';
+                    div.innerHTML = `
+                        <img src="${user.avatar}" alt="${user.username}">
+                        <span>${escapeHtml(user.username)}</span>
+                    `;
+                    div.onclick = () => startDM(user);
+                    resultsDiv.appendChild(div);
+                });
+                
+                db.ref('users').orderByChild('email').startAt(query).endAt(query + '\uf8ff').limitToFirst(10).once('value', snap2 => {
+                    snap2.forEach(child => {
+                        const user = child.val();
+                        if (user.id === currentUser.id) return;
+                        
+                        if (!resultsDiv.querySelector(`[data-id="${user.id}"]`)) {
+                            const div = document.createElement('div');
+                            div.className = 'dm-search-item';
+                            div.setAttribute('data-id', user.id);
+                            div.innerHTML = `
+                                <img src="${user.avatar}" alt="${user.username}">
+                                <span>${escapeHtml(user.username)}</span>
+                            `;
+                            div.onclick = () => startDM(user);
+                            resultsDiv.appendChild(div);
+                        }
+                    });
+                });
+            });
+        }
+        
+        function startDM(user) {
+            document.getElementById('dm-search-input').value = '';
+            document.getElementById('dm-search-results').innerHTML = '';
+            
+            const conversationId = [currentUser.id, user.id].sort().join('_');
+            
+            db.ref('userConversations/' + currentUser.id + '/' + conversationId).once('value', snap => {
+                if (!snap.exists()) {
+                    const convData = {
+                        conversationId: conversationId,
+                        partnerId: user.id,
+                        partnerName: user.username,
+                        partnerAvatar: user.avatar,
+                        lastMessage: '',
+                        lastMessageTime: firebase.database.ServerValue.TIMESTAMP,
+                        lastMessageSender: '',
+                        unreadCount: 0
+                    };
+                    
+                    db.ref('userConversations/' + currentUser.id + '/' + conversationId).set(convData);
+                    
+                    const partnerConvData = {
+                        conversationId: conversationId,
+                        partnerId: currentUser.id,
+                        partnerName: currentUser.username,
+                        partnerAvatar: currentUser.avatar,
+                        lastMessage: '',
+                        lastMessageTime: firebase.database.ServerValue.TIMESTAMP,
+                        lastMessageSender: '',
+                        unreadCount: 0
+                    };
+                    
+                    db.ref('userConversations/' + user.id + '/' + conversationId).set(partnerConvData);
+                }
+                
+                openDMChat(conversationId, user);
+            });
+            
+            toggleDMMenu();
+        }
+        
+        function renderConversationsList() {
+            const container = document.getElementById('dm-conversations');
+            
+            if (Object.keys(conversationsCache).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: #666; padding: 20px;">
+                        Nenhuma conversa ainda.<br>Busque um usuário acima para começar!
+                    </div>
+                `;
+                return;
+            }
+            
+            const sorted = Object.values(conversationsCache).sort((a, b) => 
+                (b.lastMessageTime || 0) - (a.lastMessageTime || 0)
+            );
+            
+            container.innerHTML = '';
+            sorted.forEach(conv => {
+                const isUnread = conv.unreadCount > 0 && conv.lastMessageSender !== currentUser.id;
+                const time = conv.lastMessageTime ? 
+                    new Date(conv.lastMessageTime).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'}) : '';
+                
+                const div = document.createElement('div');
+                div.className = `dm-conversation-item ${isUnread ? 'unread' : ''}`;
+                div.onclick = () => openDMChatFromCache(conv.conversationId);
+                
+                div.innerHTML = `
+                    <img src="${conv.partnerAvatar}" alt="${conv.partnerName}">
+                    <div class="dm-conversation-info">
+                        <div class="dm-conversation-name">
+                            ${escapeHtml(conv.partnerName)}
+                            ${isUnread ? '<span style="color: var(--neon-red); font-size: 0.7rem;">●</span>' : ''}
+                        </div>
+                        <div class="dm-conversation-preview">${escapeHtml(conv.lastMessage || 'Iniciar conversa...')}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="dm-conversation-time">${time}</div>
+                        ${isUnread ? `<div class="dm-unread-count">${conv.unreadCount}</div>` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+        
+        function openDMChatFromCache(conversationId) {
+            const conv = conversationsCache[conversationId];
+            if (!conv) return;
+            
+            const partner = {
+                id: conv.partnerId,
+                username: conv.partnerName,
+                avatar: conv.partnerAvatar
+            };
+            
+            openDMChat(conversationId, partner);
+            
+            if (conv.unreadCount > 0) {
+                db.ref('userConversations/' + currentUser.id + '/' + conversationId).update({
+                    unreadCount: 0
+                });
+            }
+        }
+        
+        function openDMChat(conversationId, partner) {
+            currentDMPartner = { ...partner, conversationId };
+            
+            document.getElementById('dm-chat-avatar').src = partner.avatar;
+            document.getElementById('dm-chat-username').textContent = partner.username;
+            document.getElementById('dm-chat-window').classList.add('show');
+            document.getElementById('dm-chat-input').focus();
+            
+            loadDMMessages(conversationId);
+        }
+        
+        function loadDMMessages(conversationId) {
+            const container = document.getElementById('dm-chat-messages');
+            container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">Carregando...</div>';
+            
+            if (dmListeners[conversationId]) {
+                db.ref('conversations/' + conversationId).off('child_added', dmListeners[conversationId]);
+            }
+            
+            db.ref('conversations/' + conversationId).limitToLast(50).once('value', snap => {
+                container.innerHTML = '';
+                
+                snap.forEach(child => {
+                    const msg = child.val();
+                    renderDMMessage(msg);
+                });
+                
+                container.scrollTop = container.scrollHeight;
+            });
+            
+            const listener = db.ref('conversations/' + conversationId).limitToLast(1).on('child_added', snap => {
+                const msg = snap.val();
+                if (!document.getElementById('dm-msg-' + snap.key)) {
+                    renderDMMessage(msg);
+                    container.scrollTop = container.scrollHeight;
+                }
+            });
+            
+            dmListeners[conversationId] = listener;
+        }
+        
+        function renderDMMessage(msg) {
+            const container = document.getElementById('dm-chat-messages');
+            const isOwn = msg.senderId === currentUser.id;
+            
+            const div = document.createElement('div');
+            div.id = 'dm-msg-' + msg.timestamp + '-' + msg.senderId;
+            div.className = 'dm-message ' + (isOwn ? 'own' : '');
+            
+            const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+            
+            div.innerHTML = `
+                <div class="dm-message-content">${escapeHtml(msg.text)}</div>
+                <div class="dm-message-time">${time}</div>
+            `;
+            
+            container.appendChild(div);
+        }
+        
+        function sendDMMessage() {
+            const input = document.getElementById('dm-chat-input');
+            const text = input.value.trim();
+            
+            if (!text || !currentDMPartner || !currentUser) return;
+            
+            const conversationId = currentDMPartner.conversationId;
+            const now = Date.now();
+            
+            const msg = {
+                senderId: currentUser.id,
+                senderName: currentUser.username,
+                senderAvatar: currentUser.avatar,
+                text: text,
+                timestamp: now
+            };
+            
+            db.ref('conversations/' + conversationId).push(msg);
+            
+            db.ref('userConversations/' + currentUser.id + '/' + conversationId).update({
+                lastMessage: text,
+                lastMessageTime: now,
+                lastMessageSender: currentUser.id,
+                unreadCount: 0
+            });
+            
+            db.ref('userConversations/' + currentDMPartner.id + '/' + conversationId).once('value', snap => {
+                if (snap.exists()) {
+                    const currentUnread = snap.val().unreadCount || 0;
+                    db.ref('userConversations/' + currentDMPartner.id + '/' + conversationId).update({
+                        lastMessage: text,
+                        lastMessageTime: now,
+                        lastMessageSender: currentUser.id,
+                        unreadCount: currentUnread + 1
+                    });
+                }
+            });
+            
+            input.value = '';
+        }
+        
+        function closeDMChat() {
+            if (currentDMPartner) {
+                if (dmListeners[currentDMPartner.conversationId]) {
+                    db.ref('conversations/' + currentDMPartner.conversationId).off('child_added', dmListeners[currentDMPartner.conversationId]);
+                    delete dmListeners[currentDMPartner.conversationId];
+                }
+            }
+            
+            currentDMPartner = null;
+            document.getElementById('dm-chat-window').classList.remove('show');
+        }
+        
+        function showToastNotification(partnerName, partnerAvatar, text, conversationId) {
+            if (currentDMPartner && currentDMPartner.conversationId === conversationId) {
+                return;
+            }
+            
+            const toast = document.getElementById('toast-notification');
+            document.getElementById('toast-avatar').src = partnerAvatar;
+            document.getElementById('toast-title').textContent = `💬 ${partnerName}`;
+            document.getElementById('toast-text').textContent = text.length > 30 ? text.substring(0, 30) + '...' : text;
+            
+            toast.setAttribute('data-conversation', conversationId);
+            
+            toast.classList.add('show');
+            
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+        
+        function openDMFromToast() {
+            const toast = document.getElementById('toast-notification');
+            const conversationId = toast.getAttribute('data-conversation');
+            
+            if (conversationId && conversationsCache[conversationId]) {
+                openDMChatFromCache(conversationId);
+                toast.classList.remove('show');
+            }
+        }
+        
         function renderMessage(msgId, msg, isOwn, showAdminTag) {
-            // Não renderiza se estiver deletada
             if (msg.deleted) return;
             
             const container = document.getElementById('chat-messages');
@@ -1508,7 +2340,6 @@
                 usersSnap.forEach(child => {
                     const u = child.val();
                     u.id = child.key;
-                    // Só conta como online se lastSeen recente
                     if (u.isOnline && u.lastSeen > twoMinutesAgo) onlineCount++;
                     users.push(u);
                 });
@@ -1550,7 +2381,6 @@
             filtered.sort((a, b) => {
                 if (a.isAdmin && !b.isAdmin) return -1;
                 if (!a.isAdmin && b.isAdmin) return 1;
-                // Ordena por online primeiro
                 const aOnline = a.isOnline && a.lastSeen > twoMinutesAgo;
                 const bOnline = b.isOnline && b.lastSeen > twoMinutesAgo;
                 return (bOnline ? 1 : 0) - (aOnline ? 1 : 0);
@@ -1718,7 +2548,6 @@
         }
         
         function confirmDelete() {
-            // Agora remove completamente sempre, não marca como deletada
             db.ref('messages/' + selectedDeleteMsg.id).remove();
             closeModal('delete-modal');
         }
@@ -1727,13 +2556,11 @@
         
         function logout() {
             if (currentUser) {
-                // Marca como offline imediatamente
                 db.ref('users/' + currentUser.id).update({
                     isOnline: false,
                     lastSeen: firebase.database.ServerValue.TIMESTAMP
                 });
                 
-                // Remove o onDisconnect para não sobrescrever
                 db.ref('users/' + currentUser.id).onDisconnect().cancel();
             }
             
@@ -1766,7 +2593,6 @@
         
         window.onload = checkSession;
         
-        // Cleanup quando fechar a página
         window.onbeforeunload = () => {
             if (currentUser) {
                 db.ref('users/' + currentUser.id).update({
@@ -1777,7 +2603,6 @@
             clearInterval(heartbeatInterval);
         };
         
-        // Também trata quando o navegador crasha ou fecha abruptamente
         window.onpagehide = () => {
             if (currentUser) {
                 db.ref('users/' + currentUser.id).update({
