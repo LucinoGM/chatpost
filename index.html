@@ -263,7 +263,6 @@
         
         .error-msg.show { display: block; }
         
-        /* Tela de Verificação */
         #verification-screen {
             display: none;
             position: fixed;
@@ -427,12 +426,25 @@
             border-radius: 50%;
             border: 2px solid var(--neon-green);
             box-shadow: 0 0 15px rgba(57, 255, 20, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.8);
         }
         
         .username-display {
             color: var(--neon-green);
             font-weight: 700;
             font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .username-display:hover {
+            text-shadow: 0 0 10px var(--neon-green);
         }
         
         .online-count {
@@ -899,6 +911,36 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: #888;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        
+        .admin-tab.active {
+            background: rgba(191, 0, 255, 0.2);
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+        
+        .admin-tab:hover:not(.active) {
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        
         .search-box {
             display: flex;
             gap: 10px;
@@ -928,6 +970,13 @@
             border-radius: 10px;
             border-left: 3px solid var(--neon-green);
             min-width: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
         }
         
         .stat-box.banned { border-left-color: var(--neon-red); }
@@ -1016,6 +1065,11 @@
             font-weight: 700;
             font-size: 0.75rem;
             transition: all 0.3s;
+        }
+        
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
         .btn-mute { background: var(--neon-orange); color: #000; }
@@ -1245,8 +1299,62 @@
         }
         
         .menu-btn:hover {
-            background: var(--neon-red);
+            background: var(--neon-purple);
             transform: scale(1.1);
+        }
+        
+        .message-dropdown {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background: rgba(20, 20, 20, 0.98);
+            border: 1px solid var(--neon-purple);
+            border-radius: 10px;
+            min-width: 150px;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .message-dropdown.show {
+            display: block;
+        }
+        
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dropdown-item:hover {
+            background: rgba(191, 0, 255, 0.2);
+        }
+        
+        .dropdown-item:first-child {
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .dropdown-item:last-child {
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .dropdown-item.delete {
+            color: var(--neon-red);
+        }
+        
+        .dropdown-item.delete:hover {
+            background: rgba(255, 7, 58, 0.2);
+        }
+        
+        .message-id {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 5px;
+            font-family: monospace;
         }
         
         .deleted-message {
@@ -1378,6 +1486,126 @@
             color: #aaa;
         }
         
+        .command-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(10, 10, 10, 0.98);
+            border: 2px solid var(--neon-green);
+            border-radius: 20px;
+            padding: 30px 50px;
+            z-index: 5000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 0 50px rgba(57, 255, 20, 0.5);
+            animation: commandPulse 0.5s ease;
+        }
+        
+        .command-notification.show {
+            display: flex;
+        }
+        
+        @keyframes commandPulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .command-icon {
+            font-size: 3rem;
+        }
+        
+        .command-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-green);
+            text-align: center;
+        }
+        
+        .command-subtext {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        #profile-modal {
+            max-width: 450px;
+        }
+        
+        .profile-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .profile-section h4 {
+            color: var(--neon-blue);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--neon-green);
+            margin: 0 auto 15px;
+            display: block;
+            object-fit: cover;
+        }
+        
+        .cooldown-info {
+            background: rgba(255, 102, 0, 0.1);
+            border: 1px solid var(--neon-orange);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: var(--neon-orange);
+            text-align: center;
+        }
+        
+        .cooldown-info.ready {
+            background: rgba(57, 255, 20, 0.1);
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed var(--neon-blue);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--neon-blue);
+        }
+        
+        .file-input-label:hover {
+            background: rgba(0, 243, 255, 0.1);
+        }
+        
         @media (max-width: 768px) {
             .logo { font-size: 2rem; }
             .chat-header { flex-direction: column; padding: 10px; }
@@ -1422,6 +1650,13 @@
         <h1 class="punish-title">BANIDO</h1>
         <p class="punish-reason">Você foi banido permanentemente.</p>
         <button class="logout-btn" onclick="forceLogout()" style="margin-top: 30px;">Sair</button>
+    </div>
+
+    <!-- Command Notification -->
+    <div class="command-notification" id="command-notification">
+        <div class="command-icon" id="command-icon">⚡</div>
+        <div class="command-text" id="command-text">Comando executado!</div>
+        <div class="command-subtext" id="command-subtext"></div>
     </div>
 
     <!-- Verification Screen -->
@@ -1521,8 +1756,8 @@
                 </button>
                 
                 <span class="online-count" id="online-count">● 0</span>
-                <span class="username-display" id="display-username">User</span>
-                <img src="" alt="Avatar" class="user-avatar" id="user-avatar">
+                <span class="username-display" id="display-username" onclick="openProfile()">User</span>
+                <img src="" alt="Avatar" class="user-avatar" id="user-avatar" onclick="openProfile()">
                 <button class="logout-btn" onclick="logout()">SAIR</button>
             </div>
         </div>
@@ -1593,23 +1828,29 @@
             <button class="close-admin" onclick="toggleAdminPanel()">×</button>
         </div>
         <div class="admin-controls">
+            <div class="admin-tabs">
+                <button class="admin-tab active" onclick="switchAdminTab('all')">👥 Todos</button>
+                <button class="admin-tab" onclick="switchAdminTab('banned')">🚫 Banidos</button>
+                <button class="admin-tab" onclick="switchAdminTab('muted')">🔇 Mutados</button>
+                <button class="admin-tab" onclick="switchAdminTab('online')">🟢 Online</button>
+            </div>
             <div class="search-box">
                 <input type="text" id="user-search" placeholder="🔍 Buscar usuário..." oninput="searchUsers()">
             </div>
             <div class="admin-stats">
-                <div class="stat-box">
+                <div class="stat-box" onclick="switchAdminTab('all')">
                     <div class="stat-label">Total</div>
                     <div class="stat-value" id="total-users">0</div>
                 </div>
-                <div class="stat-box">
+                <div class="stat-box" onclick="switchAdminTab('online')">
                     <div class="stat-label">Online</div>
                     <div class="stat-value" id="online-now">0</div>
                 </div>
-                <div class="stat-box muted">
+                <div class="stat-box muted" onclick="switchAdminTab('muted')">
                     <div class="stat-label">Mutados</div>
                     <div class="stat-value" id="muted-count">0</div>
                 </div>
-                <div class="stat-box banned">
+                <div class="stat-box banned" onclick="switchAdminTab('banned')">
                     <div class="stat-label">Banidos</div>
                     <div class="stat-value" id="banned-count">0</div>
                 </div>
@@ -1668,6 +1909,39 @@
         </div>
     </div>
 
+    <!-- Profile Modal -->
+    <div class="modal" id="profile-modal">
+        <h3>👤 Meu Perfil</h3>
+        
+        <div class="profile-section">
+            <img src="" alt="Avatar" class="avatar-preview" id="profile-avatar-preview">
+            <div class="file-input-wrapper">
+                <input type="file" id="avatar-input" accept="image/*" onchange="previewAvatar()">
+                <label for="avatar-input" class="file-input-label">📷 Escolher nova foto</label>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h4>✏️ Nome de usuário</h4>
+            <div class="cooldown-info" id="name-cooldown">
+                Verificando...
+            </div>
+            <input type="text" id="profile-username" placeholder="Novo nome" maxlength="20">
+        </div>
+        
+        <div class="profile-section">
+            <h4>🔒 Alterar Senha</h4>
+            <input type="password" id="current-password" placeholder="Senha atual">
+            <input type="password" id="new-password" placeholder="Nova senha (mín 6)">
+            <input type="password" id="confirm-password" placeholder="Confirmar nova senha">
+        </div>
+        
+        <div class="modal-buttons">
+            <button class="modal-btn modal-confirm" onclick="saveProfile()">💾 Salvar</button>
+            <button class="modal-btn modal-cancel" onclick="closeModal('profile-modal')">Cancelar</button>
+        </div>
+    </div>
+
     <script>
         // ==========================================
         // CONFIGURAÇÃO EMAILJS - SUAS CREDENCIAIS
@@ -1705,6 +1979,8 @@
         let muteCheckInterval = null;
         let statsInterval = null;
         let heartbeatInterval = null;
+        let currentAdminTab = 'all';
+        let pendingAvatarFile = null;
         
         // Variáveis de verificação
         let pendingVerification = null;
@@ -1729,7 +2005,6 @@
         
         async function sendVerificationEmail(email, code, username) {
             try {
-                // Template OTP do EmailJS usa: passcode, time, email
                 const templateParams = {
                     passcode: code,
                     time: '10 minutos',
@@ -1897,7 +2172,8 @@
                 lastSeen: firebase.database.ServerValue.TIMESTAMP,
                 isAdmin: isUserAdmin,
                 emailVerified: true,
-                verifiedAt: firebase.database.ServerValue.TIMESTAMP
+                verifiedAt: firebase.database.ServerValue.TIMESTAMP,
+                lastNameChange: 0
             };
             
             await db.ref('users/' + userId).set(newUser);
@@ -2182,7 +2458,7 @@
         }
 
         // ==========================================
-        // PRESENCE, CHAT, DM, ADMIN
+        // PRESENCE, CHAT, COMMANDS, DM, ADMIN
         // ==========================================
         
         function setupPresence() {
@@ -2322,6 +2598,75 @@
             }
             
             addSystemMessage(`${currentUser.username} entrou no chat!`);
+        }
+        
+        function showCommandNotification(icon, text, subtext = '') {
+            const notif = document.getElementById('command-notification');
+            document.getElementById('command-icon').textContent = icon;
+            document.getElementById('command-text').textContent = text;
+            document.getElementById('command-subtext').textContent = subtext;
+            
+            notif.classList.add('show');
+            
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 3000);
+        }
+        
+        async function executeCommand(command) {
+            if (!isAdmin) return;
+            
+            const parts = command.split(' ');
+            const cmd = parts[0].toLowerCase();
+            
+            switch(cmd) {
+                case '/clear':
+                    const messagesSnap = await db.ref('messages').once('value');
+                    const updates = {};
+                    messagesSnap.forEach(child => {
+                        updates[child.key + '/deleted'] = true;
+                    });
+                    await db.ref('messages').update(updates);
+                    showCommandNotification('🧹', 'Chat limpo!', 'Todas as mensagens foram apagadas');
+                    addSystemMessage('🧹 Chat limpo por ' + currentUser.username);
+                    break;
+                    
+                case '/kick':
+                    if (parts.length < 2) {
+                        showCommandNotification('❌', 'Uso: /kick @usuario', '');
+                        return;
+                    }
+                    const kickUsername = parts[1].replace('@', '');
+                    const kickSnap = await db.ref('users').orderByChild('username').equalTo(kickUsername).once('value');
+                    if (!kickSnap.exists()) {
+                        showCommandNotification('❌', 'Usuário não encontrado', kickUsername);
+                        return;
+                    }
+                    kickSnap.forEach(child => {
+                        const user = child.val();
+                        if (user.email === ADMIN_EMAIL) {
+                            showCommandNotification('⛔', 'Não pode expulsar o admin principal', '');
+                            return;
+                        }
+                        db.ref('users/' + child.key).update({ isOnline: false });
+                        showCommandNotification('👢', `${kickUsername} expulso!`, '');
+                        addSystemMessage(`👢 ${kickUsername} foi expulso por ${currentUser.username}`);
+                    });
+                    break;
+                    
+                case '/announce':
+                    const msg = parts.slice(1).join(' ');
+                    if (!msg) {
+                        showCommandNotification('❌', 'Uso: /announce mensagem', '');
+                        return;
+                    }
+                    addSystemMessage('📢 ANÚNCIO: ' + msg);
+                    showCommandNotification('📢', 'Anúncio enviado!', '');
+                    break;
+                    
+                default:
+                    showCommandNotification('❓', 'Comando desconhecido', cmd);
+            }
         }
         
         function setupDMListener() {
@@ -2710,9 +3055,20 @@
             const time = new Date(msg.timestamp).toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
             const adminTagHtml = showAdminTag ? '<span class="admin-tag">[ADMIN]</span>' : '';
             
+            const canDelete = isOwn || isAdmin;
+            const canCopyId = true;
+            
             let menuHtml = '';
-            if (isOwn || isAdmin) {
-                menuHtml = `<div class="message-menu"><button class="menu-btn" onclick="showDeleteModal('${msgId}', ${isOwn})">×</button></div>`;
+            if (canDelete || canCopyId) {
+                menuHtml = `
+                    <div class="message-menu">
+                        <button class="menu-btn" onclick="toggleMessageDropdown('${msgId}')">⋮</button>
+                        <div class="message-dropdown" id="dropdown-${msgId}">
+                            ${canCopyId ? `<div class="dropdown-item" onclick="copyMessageId('${msgId}')">📋 Copiar ID</div>` : ''}
+                            ${canDelete ? `<div class="dropdown-item delete" onclick="showDeleteModal('${msgId}', ${isOwn})">🗑️ Apagar</div>` : ''}
+                        </div>
+                    </div>
+                `;
             }
             
             div.innerHTML = `
@@ -2723,10 +3079,48 @@
                     ${isOwn ? `<img src="${currentUser.avatar}" class="message-avatar">` : ''}
                 </div>
                 <div class="message-content">${menuHtml}${escapeHtml(msg.text)}</div>
+                <div class="message-id">ID: ${msgId}</div>
             `;
             
             container.appendChild(div);
             container.scrollTop = container.scrollHeight;
+        }
+        
+        function toggleMessageDropdown(msgId) {
+            const dropdown = document.getElementById('dropdown-' + msgId);
+            const isOpen = dropdown.classList.contains('show');
+            
+            document.querySelectorAll('.message-dropdown').forEach(d => d.classList.remove('show'));
+            
+            if (!isOpen) {
+                dropdown.classList.add('show');
+                
+                setTimeout(() => {
+                    const closeDropdown = (e) => {
+                        if (!e.target.closest('.message-menu')) {
+                            dropdown.classList.remove('show');
+                            document.removeEventListener('click', closeDropdown);
+                        }
+                    };
+                    document.addEventListener('click', closeDropdown);
+                }, 0);
+            }
+        }
+        
+        function copyMessageId(msgId) {
+            navigator.clipboard.writeText(msgId).then(() => {
+                showCommandNotification('📋', 'ID copiado!', msgId.substring(0, 8) + '...');
+            }).catch(() => {
+                const textArea = document.createElement('textarea');
+                textArea.value = msgId;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showCommandNotification('📋', 'ID copiado!', msgId.substring(0, 8) + '...');
+            });
+            
+            document.querySelectorAll('.message-dropdown').forEach(d => d.classList.remove('show'));
         }
         
         function addSystemMessage(text) {
@@ -2741,7 +3135,14 @@
         function sendMessage() {
             const input = document.getElementById('message-input');
             const text = input.value.trim();
+            
             if (!text || !currentUser) return;
+            
+            if (text.startsWith('/') && isAdmin) {
+                executeCommand(text);
+                input.value = '';
+                return;
+            }
             
             db.ref('muted/' + currentUser.email.replace(/\./g, '_')).once('value', snap => {
                 if (snap.exists() && Date.now() < snap.val().until) {
@@ -2782,6 +3183,13 @@
                 loadAdminData();
                 statsInterval = setInterval(loadAdminData, 10000);
             }
+        }
+        
+        function switchAdminTab(tab) {
+            currentAdminTab = tab;
+            document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadAdminData();
         }
         
         async function loadAdminData() {
@@ -2828,8 +3236,19 @@
             list.innerHTML = '';
             
             let filtered = users;
+            
+            // Filtrar por tab
+            if (currentAdminTab === 'banned') {
+                filtered = users.filter(u => banned[u.email]);
+            } else if (currentAdminTab === 'muted') {
+                filtered = users.filter(u => muted[u.email]);
+            } else if (currentAdminTab === 'online') {
+                filtered = users.filter(u => u.isOnline && u.lastSeen > twoMinutesAgo);
+            }
+            
+            // Filtrar por busca
             if (filter) {
-                filtered = users.filter(u => 
+                filtered = filtered.filter(u => 
                     u.username.toLowerCase().includes(filter) || 
                     u.email.toLowerCase().includes(filter)
                 );
@@ -2842,6 +3261,11 @@
                 const bOnline = b.isOnline && b.lastSeen > twoMinutesAgo;
                 return (bOnline ? 1 : 0) - (aOnline ? 1 : 0);
             });
+            
+            if (filtered.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: #666; padding: 40px;">Nenhum usuário encontrado nesta categoria</div>';
+                return;
+            }
             
             filtered.forEach(u => {
                 const isBanned = !!banned[u.email];
@@ -2870,20 +3294,22 @@
                     } else {
                         actions += `<button class="action-btn btn-make-admin" onclick="makeAdmin('${u.id}', '${u.username}')">👑 Tornar Admin</button>`;
                     }
-                }
-                
-                if (!isSelf) {
-                    if (isMuted) {
-                        actions += `<button class="action-btn btn-unmute" onclick="unmuteUser('${u.email}')">🔊 Desmutar</button>`;
-                    } else {
-                        actions += `<button class="action-btn btn-mute" onclick="showMuteModal('${u.email}')">🔇 Mutar</button>`;
-                    }
                     
-                    if (isBanned) {
-                        actions += `<button class="action-btn btn-unban" onclick="unbanUser('${u.email}')">✓ Desbanir</button>`;
-                    } else {
-                        actions += `<button class="action-btn btn-ban" onclick="banUser('${u.email}', '${u.username}')">✕ Banir</button>`;
+                    if (!isSelf) {
+                        if (isMuted) {
+                            actions += `<button class="action-btn btn-unmute" onclick="unmuteUser('${u.email}')">🔊 Desmutar</button>`;
+                        } else {
+                            actions += `<button class="action-btn btn-mute" onclick="showMuteModal('${u.email}')">🔇 Mutar</button>`;
+                        }
+                        
+                        if (isBanned) {
+                            actions += `<button class="action-btn btn-unban" onclick="unbanUser('${u.email}')">✓ Desbanir</button>`;
+                        } else {
+                            actions += `<button class="action-btn btn-ban" onclick="banUser('${u.email}', '${u.username}')">✕ Banir</button>`;
+                        }
                     }
+                } else {
+                    actions += '<span style="color: gold; font-size: 0.8rem; margin-left: 10px;">🔒 Protegido</span>';
                 }
                 
                 div.innerHTML = `
@@ -2986,6 +3412,7 @@
                 updates.avatar = newAvatar;
                 currentUser.avatar = newAvatar;
                 document.getElementById('user-avatar').src = newAvatar;
+                updates.lastNameChange = Date.now();
             }
             
             db.ref('users/' + selectedRenameUser.id).update(updates);
@@ -3005,6 +3432,11 @@
         }
         
         function banUser(email, username) {
+            if (email === ADMIN_EMAIL) {
+                alert('Não é possível banir o administrador principal!');
+                return;
+            }
+            
             if (!confirm(`Banir ${username}?`)) return;
             
             db.ref('banned/' + email.replace(/\./g, '_')).set({
@@ -3039,7 +3471,176 @@
             closeModal('delete-modal');
         }
         
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none';
+            if (id === 'profile-modal') {
+                pendingAvatarFile = null;
+            }
+        }
+        
+        // Profile System
+        function openProfile() {
+            if (!currentUser) return;
+            
+            document.getElementById('profile-avatar-preview').src = currentUser.avatar;
+            document.getElementById('profile-username').value = currentUser.username;
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            
+            updateNameCooldown();
+            
+            document.getElementById('profile-modal').style.display = 'block';
+        }
+        
+        function updateNameCooldown() {
+            const cooldownDiv = document.getElementById('name-cooldown');
+            const lastChange = currentUser.lastNameChange || 0;
+            const daysSinceChange = (Date.now() - lastChange) / (1000 * 60 * 60 * 24);
+            const daysRemaining = Math.ceil(7 - daysSinceChange);
+            
+            if (isAdmin) {
+                cooldownDiv.textContent = '✓ Você é admin - pode alterar o nome a qualquer momento';
+                cooldownDiv.className = 'cooldown-info ready';
+                document.getElementById('profile-username').disabled = false;
+            } else if (daysSinceChange >= 7) {
+                cooldownDiv.textContent = '✓ Você pode alterar seu nome agora';
+                cooldownDiv.className = 'cooldown-info ready';
+                document.getElementById('profile-username').disabled = false;
+            } else {
+                cooldownDiv.textContent = `⏳ Aguarde ${daysRemaining} dias para alterar o nome novamente`;
+                cooldownDiv.className = 'cooldown-info';
+                document.getElementById('profile-username').disabled = true;
+            }
+        }
+        
+        function previewAvatar() {
+            const input = document.getElementById('avatar-input');
+            const file = input.files[0];
+            
+            if (!file) return;
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('Imagem muito grande! Máximo 2MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('profile-avatar-preview').src = e.target.result;
+                pendingAvatarFile = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        async function saveProfile() {
+            if (!currentUser) return;
+            
+            const updates = {};
+            let hasChanges = false;
+            
+            // Verificar senha
+            const currentPass = document.getElementById('current-password').value;
+            const newPass = document.getElementById('new-password').value;
+            const confirmPass = document.getElementById('confirm-password').value;
+            
+            if (currentPass || newPass || confirmPass) {
+                if (!currentPass) {
+                    alert('Digite sua senha atual');
+                    return;
+                }
+                if (currentPass !== currentUser.password) {
+                    alert('Senha atual incorreta');
+                    return;
+                }
+                if (newPass.length < 6) {
+                    alert('Nova senha deve ter no mínimo 6 caracteres');
+                    return;
+                }
+                if (newPass !== confirmPass) {
+                    alert('As senhas não coincidem');
+                    return;
+                }
+                
+                updates.password = newPass;
+                hasChanges = true;
+            }
+            
+            // Verificar nome
+            const newUsername = document.getElementById('profile-username').value.trim();
+            if (newUsername !== currentUser.username) {
+                if (!isAdmin) {
+                    const lastChange = currentUser.lastNameChange || 0;
+                    const daysSinceChange = (Date.now() - lastChange) / (1000 * 60 * 60 * 24);
+                    if (daysSinceChange < 7) {
+                        alert('Você só pode alterar o nome a cada 7 dias');
+                        return;
+                    }
+                }
+                
+                if (newUsername.length < 3) {
+                    alert('Nome muito curto');
+                    return;
+                }
+                
+                const userSnap = await db.ref('users').orderByChild('username').equalTo(newUsername).once('value');
+                if (userSnap.exists()) {
+                    alert('Este nome já está em uso');
+                    return;
+                }
+                
+                updates.username = newUsername;
+                updates.lastNameChange = Date.now();
+                hasChanges = true;
+            }
+            
+            // Verificar avatar
+            if (pendingAvatarFile) {
+                updates.avatar = pendingAvatarFile;
+                hasChanges = true;
+            }
+            
+            if (!hasChanges) {
+                closeModal('profile-modal');
+                return;
+            }
+            
+            // Aplicar atualizações
+            await db.ref('users/' + currentUser.id).update(updates);
+            
+            // Atualizar local
+            if (updates.username) {
+                currentUser.username = updates.username;
+                document.getElementById('display-username').textContent = updates.username;
+            }
+            if (updates.avatar) {
+                currentUser.avatar = updates.avatar;
+                document.getElementById('user-avatar').src = updates.avatar;
+            }
+            if (updates.password) {
+                currentUser.password = updates.password;
+            }
+            if (updates.lastNameChange) {
+                currentUser.lastNameChange = updates.lastNameChange;
+            }
+            
+            // Atualizar mensagens antigas
+            if (updates.username || updates.avatar) {
+                db.ref('messages').orderByChild('userId').equalTo(currentUser.id).once('value', snap => {
+                    const msgUpdates = {};
+                    snap.forEach(child => {
+                        if (updates.username) msgUpdates[child.key + '/username'] = updates.username;
+                        if (updates.avatar) msgUpdates[child.key + '/avatar'] = updates.avatar;
+                    });
+                    if (Object.keys(msgUpdates).length > 0) {
+                        db.ref('messages').update(msgUpdates);
+                    }
+                });
+            }
+            
+            showCommandNotification('✅', 'Perfil atualizado!', '');
+            closeModal('profile-modal');
+        }
         
         function logout() {
             if (currentUser) {
